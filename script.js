@@ -29,6 +29,13 @@ function subtractArr(){
     input.value = newArr;
 }
 
+function percent() {
+    let val = Number(input.value) / 100;
+    
+    val = val.toString();
+    currInput = [];
+    addArr(val);
+}
 
 function clearAll(){
     input.value = "";
@@ -85,9 +92,12 @@ btns.addEventListener("click", (e) => {
         subtractArr()
     }
 
-
     if(value === "ac"){
         clearAll();
+    }
+
+    if(value === "percent"){
+        percent();
     }
 
     if(e.target.classList.contains('operator-btn') && value !== "equals"){
@@ -104,8 +114,7 @@ btns.addEventListener("click", (e) => {
     }
 
     if(!operationActive && e.target.classList.contains('number-btns')){
-        input.value = "";
-        currInput = [];
+        clearAll()
         if(value === "0"){
             input.value = value;
         } else if((input.value === "0" || input.value === "") && value === ".") {   
@@ -118,11 +127,12 @@ btns.addEventListener("click", (e) => {
         operationActive = true;
     }
 
+
+    console.log("operator: " + operator);
+    console.log(currInput);
+    console.log(input.value);
     console.log(operationActive);
     console.log("result: " + result);
     console.log("num1: " + num1);
     console.log("num2: " + num2);
-    console.log("operator: " + operator)
-    console.log(currInput);
-    console.log(input.value);
 })
