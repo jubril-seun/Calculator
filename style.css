@@ -76,15 +76,15 @@ button {
     font-size: 36px;
 }
 
-.operation-btn{
+.operator-btn{
     background-color: var(--orange-color);
 }
 
-.secondary-btn{
+.modifier-btn{
     background-color: var(--light-gray);
 }
 
-.numeral-btn {
+.number-btns {
     background-color: var(--dark-gray);
 }
 
@@ -95,4 +95,16 @@ button:hover {
 button:active {
     transform:translateY(0px);
     scale: 95%;
+}
+
+.del-btn {
+    fill: var(--white-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.del-btn svg {
+    width: 50px;
+    pointer-events: none;
 }
