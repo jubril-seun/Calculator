@@ -1,53 +1,61 @@
 let input = document.getElementById("input-result");
 const btns = document.getElementById("calc-btns")
 
-input.value = "";
-let num1 = 0;
-let num2 = 0;
-let result = 0;
+
+input.value = null;
 let operator = null;
-let currInput = [];
-let operationActive = true;
+let num1 = null;
+let num2 = null;
+let result = null;
+let active = false;
 
 
-function addArr(val){
-    
-    for(let i = 0; i < val.length; i++){
-        currInput.push(val[i]);
+// Backspace function
+function backspace(){
+    let val = input.value;
+    val = val.slice(0, -1);
+
+    input.value = val;
+    if(active){
+       num1 = Number(val);
+       result = Number(val);
     }
-    
-    let newArr = currInput.join("");
-    
-    input.value = newArr;
+
 }
 
-
-function subtractArr(){
-    currInput.pop();
-    let newArr = currInput.join('');
-    
-    input.value = newArr;
+// All clear function
+function clearAll(){
+    input.value = null;
+    operator = null;
+    num1 = null;
+    num2 = null;
+    result = null;
+    active = false; 
 }
 
+// Percent function
 function percent() {
-    let val = Number(input.value) / 100;
+    let val = Number((input.value) / 100).toFixed(2);
     
     val = val.toString();
-    currInput = [];
-    addArr(val);
+    input.value = val;
+
+    if(active){
+        result = Number(val);
+        num1 = Number(val);
+    }
 }
 
-function clearAll(){
-    input.value = "";
-    num1 = 0;
-    num2 = 0;
-    result = 0;
-    operator = null;
-    currInput = [];
-}
-
+// Evaluate function
 function evaluate (){
    
+    if(operator === "division" && num2 < 1){
+        input.value = "ouch!";
+        num1 = null;
+        result = null;
+        return;
+    }
+
     if(operator === "addition"){
         result = num1 + num2;
     } else if(operator === "subtraction"){
@@ -59,80 +67,84 @@ function evaluate (){
     }
 
 
-    if(Number.isInteger(result)){
-        input.value = result;
-        num1 = result; 
-    } else {
-        input.value = result.toFixed(2);
-        num1 = result.toFixed(2);
+    if(result !== null){
+        if(Number.isInteger(result)){
+            input.value = result;
+            num1 = Number(result); 
+        } else {
+            input.value = result.toFixed(2);
+            num1 = Number(result.toFixed(2));
+        }
     }
     
 }
 
 btns.addEventListener("click", (e) => {
       
-    let value = e.target.dataset.id;
+    let elm = e.target.dataset.id;
+    
+    // Clear display after calculation
+    if(e.target.classList.contains('number-btns') && active){
+        input.value = "";
+        active = false;
+    }
     
     // Inputing numbers to display
     if(e.target.classList.contains('number-btns')){   
-        if((input.value === "0"  || input.value === "") && value === "0"){
-            input.value = value;
-        } else if((input.value === "0" || input.value === "") && value === ".") {   
-            addArr("0");
-            addArr(".")
-        } else if(value === "." && currInput.includes(".")){
+        if(input.value === "0" && elm === "0"){
+            input.value = elm;
+        } else if((input.value === "0" || input.value === "") && elm === ".") {   
+            input.value = "0";
+            input.value += elm;
+        } else if(elm === "." && input.value.includes(".")){
             return;
+        } else if (input.value === "0" && elm !== 0){
+            input.value = "";
+            input.value += elm;
         } else {
-            addArr(value);
+              input.value += elm; 
+            }   
+        }
+
+    // Add number to variables
+    if(e.target.classList.contains('operator-btn')){
+        if(num1 === null){
+            operator = elm;
+            num1 = Number(input.value);
+            input.value = null;
+        } else if(num2 === null || result !== null){
+            num2 = Number(input.value);
         }
     }
 
+    // Fire evaluate function
+     if(e.target.classList.contains('operator-btn')){
+        if(num1 !== null && num2 !== null){
+            evaluate();
+            operator = elm;
+            active = true;
+        }
+     }
+
     // Subtracting numbers from display
-    if(value === 'del'){
-        subtractArr()
+    if(elm === 'del'){
+        backspace()
     }
 
-    if(value === "ac"){
+    // Clearing all values
+    if(elm === "ac"){
         clearAll();
     }
 
-    if(value === "percent"){
+    // Converting to percent
+    if(elm === "percent"){
         percent();
     }
 
-    if(e.target.classList.contains('operator-btn') && value !== "equals"){
-        operationActive = true;
-        operator = value;
-        num1 = Number(input.value);
-        currInput = [];
-        } else if (value === "equals" && num1 !== 0){
-            num2 = Number(input.value);
-            evaluate();
-            currInput = [];
-            addArr(input.value);
-            operationActive = false;
-    }
 
-    if(!operationActive && e.target.classList.contains('number-btns')){
-        clearAll()
-        if(value === "0"){
-            input.value = value;
-        } else if((input.value === "0" || input.value === "") && value === ".") {   
-            addArr("0");
-            addArr(".")
-        } else {
-            addArr(value);
-        }
-
-        operationActive = true;
-    }
-
-
-    console.log("operator: " + operator);
-    console.log(currInput);
-    console.log(input.value);
-    console.log(operationActive);
-    console.log("result: " + result);
-    console.log("num1: " + num1);
-    console.log("num2: " + num2);
+/*     console.log("operator: " + operator);
+    console.log("number 1: " + num1);
+    console.log("number 2: " + num2);
+    console.log("result: " + result)
+    console.log(active); */
 })
