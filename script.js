@@ -147,9 +147,9 @@ btns.addEventListener("click", (e) => {
     }
 
 
-    console.log("operator: " + operator);
+/*  console.log("operator: " + operator);
     console.log("number 1: " + num1);
     console.log("number 2: " + num2);
     console.log("result: " + result)
-    console.log(active);
+    console.log(active); */
 })
