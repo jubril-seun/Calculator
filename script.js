@@ -12,6 +12,7 @@ let active = false;
 
 // Backspace function
 function backspace(){
+
     let val = input.value;
     val = val.slice(0, -1);
 
@@ -20,7 +21,6 @@ function backspace(){
        num1 = Number(val);
        result = Number(val);
     }
-
 }
 
 // All clear function
@@ -53,6 +53,7 @@ function evaluate (){
         input.value = "ouch!";
         num1 = null;
         result = null;
+        num2 = null;
         return;
     }
 
@@ -82,6 +83,10 @@ function evaluate (){
 btns.addEventListener("click", (e) => {
       
     let elm = e.target.dataset.id;
+
+    if(input.value === "ouch!"){
+        clearAll();
+    }
     
     // Clear display after calculation
     if(e.target.classList.contains('number-btns') && active){
@@ -142,9 +147,9 @@ btns.addEventListener("click", (e) => {
     }
 
 
-/*     console.log("operator: " + operator);
+    console.log("operator: " + operator);
     console.log("number 1: " + num1);
     console.log("number 2: " + num2);
     console.log("result: " + result)
-    console.log(active); */
+    console.log(active);
 })
