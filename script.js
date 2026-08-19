@@ -49,7 +49,7 @@ function percent() {
 // Evaluate function
 function evaluate (){
    
-    if(operator === "division" && num2 < 1){
+    if(operator === "division" && num2 === 0){
         input.value = "ouch!";
         num1 = null;
         result = null;
